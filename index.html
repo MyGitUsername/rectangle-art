@@ -14,8 +14,12 @@
       el: '#app',
       data: {
         canvasHeight: window.innerHeight,
-        canvasWidth: window.innerWidth,
-        canvasCtx: Object
+        canvasWidth: window.innerWidth
+      },
+      computed: {
+        canvasCtx: function () {
+          return document.getElementById("app").getContext("2d");    
+        }
       },
       methods: {
         getRandomColor: function () {
@@ -31,16 +35,15 @@
           this.canvasCtx.fillStyle = this.getRandomColor();
           this.canvasCtx.fillRect(x, y, w , h);
         },
-        // divide width-wise, then height-wise
         draw: function (x, y, w, h, cmp) {
           if (this.headsOrTails(1 / cmp)) { return; }
 
           if (this.headsOrTails(.5)) { // divide vertically
             this.color(x, y, w / 2 , h);
-            this.color(x + w/2, y, w, h);
+            this.color(x + w / 2, y, w, h);
             this.draw(x, y, w / 2 , h,--cmp);
-            this.draw(x + w/2, y, w, h, --cmp);
-          } else { // divide horizontally  
+            this.draw(x + w / 2, y, w, h, --cmp);
+          } else { // or divide horizontally  
             this.color(x, y, w, h / 2);
             this.color(x, y + h / 2, w, h);
             this.draw(x, y, w, h / 2, --cmp);
@@ -49,13 +52,9 @@
         }
       },
       mounted: function () {
-        var canvas =  document.getElementById("app");
-        var ctx = canvas.getContext("2d");    
-        this.canvasCtx = ctx;
-
         var run = () => {
           this.color(0, 0, this.canvasWidth, this.canvasHeight)
-          this.draw(0, 0, this.canvasWidth, this.canvasHeight, 10)
+          this.draw(0, 0, this.canvasWidth, this.canvasHeight, 12)
         };
         run();
         setInterval(() => {
