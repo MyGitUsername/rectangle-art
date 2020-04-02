@@ -9,7 +9,6 @@
     <canvas :height='canvasHeight' :width='canvasWidth' id="app"></canvas>
   </body>
   <script>
-    /* Inspired by xscreensaver deco */
     var app = new Vue({
       el: '#app',
       data: {
@@ -28,39 +27,40 @@
             b = Math.floor(255 * Math.random());
           return 'rgb(' + r + ', ' + g + ', ' + b + ')';
         },
-        headsOrTails: function (cmp) {
+        randomize: function (cmp) {
           return Math.random() < cmp;
         },
-        color: function(x, y, w, h) {
+        color: function (x, y, w, h) {
           this.canvasCtx.fillStyle = this.getRandomColor();
           this.canvasCtx.fillRect(x, y, w , h);
         },
         draw: function (x, y, w, h, cmp) {
-          if (this.headsOrTails(1 / cmp)) { return; }
+          if (this.randomize(1 / cmp)) { return; }
+          cmp -= 1;
 
-          if (this.headsOrTails(.5)) { // divide vertically
+          if (this.randomize(.5)) { // divide vertically
             this.color(x, y, w / 2 , h);
             this.color(x + w / 2, y, w, h);
-            this.draw(x, y, w / 2 , h,--cmp);
-            this.draw(x + w / 2, y, w, h, --cmp);
+            this.draw(x, y, w / 2 , h,cmp);
+            this.draw(x + w / 2, y, w, h, cmp);
           } else { // or divide horizontally  
             this.color(x, y, w, h / 2);
             this.color(x, y + h / 2, w, h);
-            this.draw(x, y, w, h / 2, --cmp);
-            this.draw(x, y + h / 2, w, h, --cmp);
+            this.draw(x, y, w, h / 2, cmp);
+            this.draw(x, y + h / 2, w, h, cmp);
           }
         }
       },
       mounted: function () {
         var run = () => {
           this.color(0, 0, this.canvasWidth, this.canvasHeight)
-          this.draw(0, 0, this.canvasWidth, this.canvasHeight, 12)
+          this.draw(0, 0, this.canvasWidth, this.canvasHeight, 9)
         };
         run();
         setInterval(() => {
           run();
         }, 5000);
       }
-    })
+    });
   </script>
 </html>
